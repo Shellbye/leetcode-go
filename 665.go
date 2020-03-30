@@ -12,7 +12,7 @@ func checkPossibility(nums []int) bool {
 	}
 	for i := 1; i < len(nums)-1; i++ {
 		// 当前数大于后一个数，破坏了非递减
-		if nums[i] > nums[i+1]{
+		if nums[i] > nums[i+1] {
 			p++
 			if p > 1 {
 				return false
@@ -34,9 +34,48 @@ func checkPossibility(nums []int) bool {
 	return true
 }
 
+func checkPossibilityV4(nums []int) bool {
+	p := -1
+	for i := 0; i < len(nums)-1; i++ {
+		if nums[i] > nums[i+1] {
+			if p != -1 {
+				return false
+			}
+			p = i
+		}
+	}
+	return p == -1 || p == 0 || p == len(nums)-2 || nums[p-1] <= nums[p+1] || nums[p] <= nums[p+2]
+}
+
+func checkPossibilityV5(nums []int) bool {
+	i := 0
+	j := len(nums) - 1
+	for i < j && nums[i] <= nums[i+1] {
+		i++
+	}
+	for i < j && nums[j] >= nums[j-1] {
+		j--
+	}
+
+	head := -100000
+	if i != 0 {
+		head = nums[i-1]
+	}
+	tail := 100000
+	if j != len(nums)-1 {
+		tail = nums[j+1]
+	}
+
+	if j-i <= 1 && (head <= nums[j] || tail >= nums[i]) {
+		return true
+	} else {
+		return false
+	}
+}
+
 func main() {
 	//var nums = []int{4, 2, 3}
-	nums := []int{3, 4, 2, 3}
-	//nums := []int{2, 3, 3, 2, 4}
+	//nums := []int{3, 4, 2, 3}
+	nums := []int{2, 3, 3, 2, 4}
 	println(checkPossibility(nums))
 }
